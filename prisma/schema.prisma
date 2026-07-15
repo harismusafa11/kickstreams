@@ -1,0 +1,63 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String    @id @default(uuid())
+  username  String    @unique
+  role      Role      @default(USER)
+  createdAt DateTime  @default(now())
+  messages  Message[]
+}
+
+enum Role {
+  USER
+  ADMIN
+  MODERATOR
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  matchId   String   // ID pertandingan dari API streamfree.top
+}
+
+model Report {
+  id          String       @id @default(uuid())
+  matchId     String
+  matchTitle  String
+  reporterIp  String?      
+  status      ReportStatus @default(PENDING)
+  createdAt   DateTime     @default(now())
+}
+
+enum ReportStatus {
+  PENDING
+  RESOLVED
+  IGNORED
+}
+
+model Announcement {
+  id        String   @id @default(uuid())
+  content   String
+  matchId   String   // "global" jika untuk semua, atau diisi ID pertandingan tertentu
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model AdConfig {
+  id         String   @id @default(uuid())
+  adType     String   // Popunder, Native, Banner
+  placement  String   // UnderPlayer, Sidebar
+  scriptCode String   // Skrip HTML mentah dari Adsterra
+  isActive   Boolean  @default(true)
+  updatedAt  DateTime @updatedAt
+}
