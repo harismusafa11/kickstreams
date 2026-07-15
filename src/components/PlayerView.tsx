@@ -196,9 +196,15 @@ export default function PlayerView({ match }: PlayerViewProps) {
     };
   }, [userId, match.stream_key]);
 
-  // Scroll to bottom on new message
+  // Scroll chat to bottom without scrolling the whole page
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (chatEndRef.current && chatEndRef.current.parentElement) {
+      const parent = chatEndRef.current.parentElement;
+      parent.scrollTo({
+        top: parent.scrollHeight,
+        behavior: "smooth"
+      });
+    }
   }, [chatMessages]);
 
   // Send message over WebSocket or REST Fallback
