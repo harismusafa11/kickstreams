@@ -427,13 +427,12 @@ body {
 .sport-tabs {
   display: flex;
   align-items: center;
-  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
   padding: 16px 24px;
   max-width: 1440px;
   margin: 0 auto;
-  overflow-x: auto;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 }
 
 .sport-tabs::-webkit-scrollbar {
