@@ -1,41 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-interface AdConfig {
-  id: string;
-  adType: string;
-  scriptCode: string;
-  isActive: boolean;
-}
+const POPUNDER_SCRIPT = `<script src="https://tuxedoarbourannouncement.com/de/85/e8/de85e87c68b20b9e42223558473ad17c.js"></script>`;
 
 export default function GlobalPopunder() {
-  const [popunderCode, setPopunderCode] = useState<string | null>(null);
-
   useEffect(() => {
     // Only show popunder ONCE per browser session
     const hasSeen = sessionStorage.getItem("hasSeenPopunder");
     if (hasSeen) return;
 
-    fetch("/api/ads")
-      .then((res) => res.json())
-      .then((data: AdConfig[]) => {
-        const popunders = data.filter((ad) => ad.isActive && ad.adType === "Popunder");
-        if (popunders.length > 0) {
-          // Just take the first active popunder
-          setPopunderCode(popunders[0].scriptCode);
-          sessionStorage.setItem("hasSeenPopunder", "true");
-        }
-      })
-      .catch((err) => console.error("Failed to fetch popunder", err));
-  }, []);
-
-  useEffect(() => {
-    if (!popunderCode) return;
-    
     // Create a temporary element to parse the HTML string
     const div = document.createElement("div");
-    div.innerHTML = popunderCode;
+    div.innerHTML = POPUNDER_SCRIPT;
     
     // Extract all scripts and inject them properly so they execute
     const scripts = div.getElementsByTagName("script");
@@ -53,13 +30,15 @@ export default function GlobalPopunder() {
       injectedScripts.push(script);
     }
 
+    sessionStorage.setItem("hasSeenPopunder", "true");
+
     // Cleanup function
     return () => {
       injectedScripts.forEach(s => {
         if (s.parentNode) s.parentNode.removeChild(s);
       });
     };
-  }, [popunderCode]);
+  }, []);
 
   return null;
 }

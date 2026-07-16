@@ -48,42 +48,54 @@ function AdIframe({ scriptCode }: { scriptCode: string }) {
   );
 }
 
+const AD_SCRIPTS: Record<string, string> = {
+  Sidebar: `<script>
+  atOptions = {
+    'key' : '5d0f0e278bb55ca8da4d4506b7e1555d',
+    'format' : 'iframe',
+    'height' : 250,
+    'width' : 300,
+    'params' : {}
+  };
+</script>
+<script src="https://tuxedoarbourannouncement.com/5d0f0e278bb55ca8da4d4506b7e1555d/invoke.js"></script>`,
+
+  UnderPlayer: `<script>
+  atOptions = {
+    'key' : '70e808ea4812d840159583a381edb720',
+    'format' : 'iframe',
+    'height' : 90,
+    'width' : 728,
+    'params' : {}
+  };
+</script>
+<script src="https://tuxedoarbourannouncement.com/70e808ea4812d840159583a381edb720/invoke.js"></script>`,
+
+  BottomBanner: `<script>
+  atOptions = {
+    'key' : '329e2af2d942556fca80d37e224b2880',
+    'format' : 'iframe',
+    'height' : 60,
+    'width' : 468,
+    'params' : {}
+  };
+</script>
+<script src="https://tuxedoarbourannouncement.com/329e2af2d942556fca80d37e224b2880/invoke.js"></script>`,
+
+  TopBanner: `<script async="async" data-cfasync="false" src="https://tuxedoarbourannouncement.com/c355bac4abe671c9bf43a4c7ea192b11/invoke.js"></script>
+<div id="container-c355bac4abe671c9bf43a4c7ea192b11"></div>`
+};
+
 export default function AdBanner({ placement }: { placement: string }) {
-  const [ads, setAds] = useState<AdConfig[]>([]);
+  const scriptCode = AD_SCRIPTS[placement];
 
-  useEffect(() => {
-    fetch("/api/ads")
-      .then((res) => res.json())
-      .then((data: AdConfig[]) => {
-        const activeAds = data.filter((ad) => ad.isActive && ad.placement === placement && ad.adType !== "Popunder");
-        setAds(activeAds);
-      })
-      .catch((err) => console.error("Failed to fetch ads", err));
-  }, [placement]);
-
-  if (ads.length === 0) return null;
+  if (!scriptCode) return null;
 
   return (
     <div className={`ad-banner-wrapper placement-${placement.toLowerCase()}`}>
-      {ads.map((ad) => {
-        const isSrcOnly =
-          ad.scriptCode.includes("src=") &&
-          !ad.scriptCode.includes("atOptions") &&
-          (ad.scriptCode.match(/<script/g) || []).length === 1;
-
-        if (isSrcOnly) {
-          const srcMatch = ad.scriptCode.match(/src=["'](.*?)["']/);
-          if (srcMatch && srcMatch[1]) {
-            return <Script key={ad.id} src={srcMatch[1]} strategy="lazyOnload" />;
-          }
-        }
-
-        return (
-          <div key={ad.id} className="ad-banner-container responsive-ad" style={{ width: "100%" }}>
-            <AdIframe scriptCode={ad.scriptCode} />
-          </div>
-        );
-      })}
+      <div className="ad-banner-container responsive-ad" style={{ width: "100%" }}>
+        <AdIframe scriptCode={scriptCode} />
+      </div>
     </div>
   );
 }
