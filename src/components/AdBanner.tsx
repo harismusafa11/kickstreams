@@ -11,9 +11,9 @@ interface AdConfig {
   isActive: boolean;
 }
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 
-function AdIframe({ scriptCode }: { scriptCode: string }) {
+function AdIframe({ scriptCode, height = "250px" }: { scriptCode: string; height?: string }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ function AdIframe({ scriptCode }: { scriptCode: string }) {
   return (
     <iframe
       ref={iframeRef}
-      style={{ width: "100%", border: "none", overflow: "hidden", minHeight: "250px", background: "transparent" }}
+      style={{ width: "100%", border: "none", overflow: "hidden", minHeight: height, background: "transparent" }}
       scrolling="no"
       title="Advertisement"
     />
@@ -94,18 +94,35 @@ const AD_SCRIPTS: Record<string, string> = {
 <script src="https://tuxedoarbourannouncement.com/329e2af2d942556fca80d37e224b2880/invoke.js"></script>`,
 
   TopBanner: `<script async="async" data-cfasync="false" src="https://tuxedoarbourannouncement.com/c355bac4abe671c9bf43a4c7ea192b11/invoke.js"></script>
-<div id="container-c355bac4abe671c9bf43a4c7ea192b11"></div>`
+<div id="container-c355bac4abe671c9bf43a4c7ea192b11"></div>`,
+
+  SideBanner: `<script>
+  atOptions = {
+    'key' : '208f9da05540fccb6ec2ae235f562a34',
+    'format' : 'iframe',
+    'height' : 50,
+    'width' : 320,
+    'params' : {}
+  };
+</script>
+<script src="https://tuxedoarbourannouncement.com/208f9da05540fccb6ec2ae235f562a34/invoke.js"></script>`
 };
 
 export default function AdBanner({ placement }: { placement: string }) {
   const scriptCode = AD_SCRIPTS[placement];
 
   if (!scriptCode) return null;
+  
+  let minHeight = "250px";
+  if (placement === "UnderPlayer" || placement === "DesktopBanner") minHeight = "90px";
+  if (placement === "BottomBanner") minHeight = "60px";
+  if (placement === "SideBanner") minHeight = "50px";
+  if (placement === "TopBanner") minHeight = "100px"; // approximate for native
 
   return (
     <div className={`ad-banner-wrapper placement-${placement.toLowerCase()}`}>
       <div className="ad-banner-container responsive-ad" style={{ width: "100%" }}>
-        <AdIframe scriptCode={scriptCode} />
+        <AdIframe scriptCode={scriptCode} height={minHeight} />
       </div>
     </div>
   );
