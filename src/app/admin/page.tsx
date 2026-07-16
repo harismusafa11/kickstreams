@@ -201,9 +201,14 @@ export default function AdminPage() {
       if (res.ok) {
         setAdScript("");
         fetchData();
+        alert("Script berhasil ditambahkan!");
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        alert(`Gagal menyimpan script: ${errorData.error || res.statusText}\n(Apakah Anda menggunakan Adblocker? Matikan Adblocker saat mengatur iklan!)`);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      alert(`Error jaringan: ${err.message}\n\nPastikan ekstensi AdBlocker (seperti uBlock, Adblock Plus, atau browser Brave) DIMATIKAN! Adblocker biasanya memblokir request yang mengandung kata "ads".`);
     }
   };
 
