@@ -63,6 +63,9 @@ async function MatchContent() {
     <>
       <HeroSection liveCount={liveCount} />
       <AdBanner placement="TopBanner" />
+      <div className="hidden md:block w-full my-6">
+        <AdBanner placement="DesktopBanner" />
+      </div>
       <MatchList matches={matches} />
       <AdBanner placement="BottomBanner" />
     </>

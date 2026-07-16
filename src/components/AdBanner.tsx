@@ -71,6 +71,17 @@ const AD_SCRIPTS: Record<string, string> = {
 </script>
 <script src="https://tuxedoarbourannouncement.com/70e808ea4812d840159583a381edb720/invoke.js"></script>`,
 
+  DesktopBanner: `<script>
+  atOptions = {
+    'key' : '70e808ea4812d840159583a381edb720',
+    'format' : 'iframe',
+    'height' : 90,
+    'width' : 728,
+    'params' : {}
+  };
+</script>
+<script src="https://tuxedoarbourannouncement.com/70e808ea4812d840159583a381edb720/invoke.js"></script>`,
+
   BottomBanner: `<script>
   atOptions = {
     'key' : '329e2af2d942556fca80d37e224b2880',
