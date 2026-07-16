@@ -8,17 +8,17 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://kicktvstreams.my.id"),
+  metadataBase: new URL("https://www.kicktvstreams.my.id"),
   title: "kickTvStreams — Live Sports Streaming",
   description:
     "Watch live sports events for free. Soccer, Basketball, Hockey, Baseball, Tennis, Cricket, Combat, and Racing — all in one place.",
   verification: {
     google: "isi-kode-google-search-console",
-    yandex: "isi-kode-yandex-webmaster",
+    yandex: "783adc4fe5423856",
     yahoo: "isi-kode-yahoo-bing",
     other: {
       "msvalidate.01": "isi-kode-bing-webmaster",
-      "p:domain_verify": "isi-kode-pinterest", // Sometimes used by others
+      "p:domain_verify": "isi-kode-pinterest",
     }
   },
   keywords: [
