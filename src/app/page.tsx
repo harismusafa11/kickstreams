@@ -69,11 +69,11 @@ async function MatchContent() {
       <MatchList matches={matches} />
       <AdBanner placement="BottomBanner" />
 
-      {/* Floating Side Banners for Desktop */}
-      <div className="hidden xl:block fixed bottom-6 left-6 z-40 w-[320px] rounded-lg overflow-hidden shadow-2xl">
+      {/* Floating Side Banners for Desktop (Skyscraper 160x600) */}
+      <div className="hidden xl:block fixed top-1/2 -translate-y-1/2 left-6 z-40 w-[160px] rounded-lg overflow-hidden shadow-2xl">
         <AdBanner placement="SideBanner" />
       </div>
-      <div className="hidden xl:block fixed bottom-6 right-6 z-40 w-[320px] rounded-lg overflow-hidden shadow-2xl">
+      <div className="hidden xl:block fixed top-1/2 -translate-y-1/2 right-6 z-40 w-[160px] rounded-lg overflow-hidden shadow-2xl">
         <AdBanner placement="SideBanner" />
       </div>
     </>
