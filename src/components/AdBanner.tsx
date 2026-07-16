@@ -96,14 +96,14 @@ const AD_SCRIPTS: Record<string, string> = {
 
   SideBanner: `<script>
   atOptions = {
-    'key' : '208f9da05540fccb6ec2ae235f562a34',
+    'key' : 'c51ffbf648534cedf1df4522b8f4b73c',
     'format' : 'iframe',
-    'height' : 50,
-    'width' : 320,
+    'height' : 600,
+    'width' : 160,
     'params' : {}
   };
 </script>
-<script src="https://tuxedoarbourannouncement.com/208f9da05540fccb6ec2ae235f562a34/invoke.js"></script>`
+<script src="https://tuxedoarbourannouncement.com/c51ffbf648534cedf1df4522b8f4b73c/invoke.js"></script>`
 };
 
 export default function AdBanner({ placement }: { placement: string }) {
@@ -114,7 +114,7 @@ export default function AdBanner({ placement }: { placement: string }) {
   let minHeight = "250px";
   if (placement === "UnderPlayer" || placement === "DesktopBanner") minHeight = "90px";
   if (placement === "BottomBanner") minHeight = "60px";
-  if (placement === "SideBanner") minHeight = "50px";
+  if (placement === "SideBanner") minHeight = "600px";
   if (placement === "TopBanner") minHeight = "100px"; // approximate for native
 
   return (
