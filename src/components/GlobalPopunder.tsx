@@ -30,7 +30,36 @@ export default function GlobalPopunder() {
       .catch((err) => console.error("Failed to fetch popunder", err));
   }, []);
 
-  if (!popunderCode) return null;
+  useEffect(() => {
+    if (!popunderCode) return;
+    
+    // Create a temporary element to parse the HTML string
+    const div = document.createElement("div");
+    div.innerHTML = popunderCode;
+    
+    // Extract all scripts and inject them properly so they execute
+    const scripts = div.getElementsByTagName("script");
+    const injectedScripts: HTMLScriptElement[] = [];
+    
+    for (let i = 0; i < scripts.length; i++) {
+      const script = document.createElement("script");
+      if (scripts[i].src) {
+        script.src = scripts[i].src;
+      } else {
+        script.innerHTML = scripts[i].innerHTML;
+      }
+      script.async = true;
+      document.body.appendChild(script);
+      injectedScripts.push(script);
+    }
 
-  return <div dangerouslySetInnerHTML={{ __html: popunderCode }} />;
+    // Cleanup function
+    return () => {
+      injectedScripts.forEach(s => {
+        if (s.parentNode) s.parentNode.removeChild(s);
+      });
+    };
+  }, [popunderCode]);
+
+  return null;
 }

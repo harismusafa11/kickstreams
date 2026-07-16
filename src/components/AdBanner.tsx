@@ -11,6 +11,43 @@ interface AdConfig {
   isActive: boolean;
 }
 
+import { useRef } from "react";
+
+function AdIframe({ scriptCode }: { scriptCode: string }) {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  useEffect(() => {
+    if (iframeRef.current) {
+      const doc = iframeRef.current.contentDocument || iframeRef.current.contentWindow?.document;
+      if (doc) {
+        doc.open();
+        doc.write(`
+          <html>
+            <head>
+              <style>
+                body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; background: transparent; }
+              </style>
+            </head>
+            <body>
+              ${scriptCode}
+            </body>
+          </html>
+        `);
+        doc.close();
+      }
+    }
+  }, [scriptCode]);
+
+  return (
+    <iframe
+      ref={iframeRef}
+      style={{ width: "100%", border: "none", overflow: "hidden", minHeight: "250px", background: "transparent" }}
+      scrolling="no"
+      title="Advertisement"
+    />
+  );
+}
+
 export default function AdBanner({ placement }: { placement: string }) {
   const [ads, setAds] = useState<AdConfig[]>([]);
 
@@ -29,7 +66,6 @@ export default function AdBanner({ placement }: { placement: string }) {
   return (
     <div className={`ad-banner-wrapper placement-${placement.toLowerCase()}`}>
       {ads.map((ad) => {
-        // If it's just a <script src="..."> we should render it using Next.js Script tag for better loading
         const isSrcOnly =
           ad.scriptCode.includes("src=") &&
           !ad.scriptCode.includes("atOptions") &&
@@ -43,11 +79,9 @@ export default function AdBanner({ placement }: { placement: string }) {
         }
 
         return (
-          <div
-            key={ad.id}
-            className="ad-banner-container responsive-ad"
-            dangerouslySetInnerHTML={{ __html: ad.scriptCode }}
-          />
+          <div key={ad.id} className="ad-banner-container responsive-ad" style={{ width: "100%" }}>
+            <AdIframe scriptCode={ad.scriptCode} />
+          </div>
         );
       })}
     </div>

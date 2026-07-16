@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Script from "next/script";
+import AdBanner from "@/components/AdBanner";
 import {
   ArrowLeft,
   Radio,
@@ -77,7 +78,6 @@ export default function PlayerView({ match }: PlayerViewProps) {
 
   // Announcements & Ads States
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
-  const [ads, setAds] = useState<AdConfig[]>([]);
 
   // Server Selection State
   const [selectedServer, setSelectedServer] = useState<number>(1);
@@ -116,12 +116,6 @@ export default function PlayerView({ match }: PlayerViewProps) {
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => setAnnouncements(data))
       .catch((err) => console.error("Error fetching announcements:", err));
-
-    // Fetch Ads configs
-    fetch("/api/ads")
-      .then((res) => (res.ok ? res.json() : []))
-      .then((data) => setAds(data.filter((ad: any) => ad.isActive)))
-      .catch((err) => console.error("Error fetching ads:", err));
   }, [match.stream_key]);
 
   // 1.5 Poll messages if WS is not connected
@@ -285,34 +279,6 @@ export default function PlayerView({ match }: PlayerViewProps) {
     setIsEditingUsername(false);
   };
 
-  // Helper to inject ads scripts (safely executing them)
-  const renderAd = (placement: string) => {
-    const matchedAds = ads.filter((ad) => ad.placement === placement);
-    return matchedAds.map((ad) => {
-      // Check if it's pure script src or standard html
-      const isSrcOnly =
-        ad.scriptCode.includes("src=") &&
-        !ad.scriptCode.includes("<script>") &&
-        !ad.scriptCode.includes("atOptions");
-
-      if (isSrcOnly) {
-        const srcMatch = ad.scriptCode.match(/src=["'](.*?)["']/);
-        const src = srcMatch ? srcMatch[1] : "";
-        return <Script key={ad.id} src={src} strategy="lazyOnload" />;
-      }
-
-      // Inject HTML script safely
-      return (
-        <div
-          key={ad.id}
-          className="ad-banner-container"
-          style={{ margin: "16px 0", textAlign: "center" }}
-          dangerouslySetInnerHTML={{ __html: ad.scriptCode }}
-        />
-      );
-    });
-  };
-
   return (
     <div className="player-layout">
 
@@ -453,7 +419,7 @@ export default function PlayerView({ match }: PlayerViewProps) {
           )}
 
           {/* UnderPlayer Ad space */}
-          {renderAd("UnderPlayer")}
+          <AdBanner placement="UnderPlayer" />
         </div>
       </div>
 
@@ -620,7 +586,7 @@ export default function PlayerView({ match }: PlayerViewProps) {
         </div>
 
         {/* Sidebar ad container inside chat */}
-        {renderAd("Sidebar")}
+        <AdBanner placement="Sidebar" />
 
         <div className="chat-input-area">
           <input
