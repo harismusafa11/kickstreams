@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import Script from "next/script";
 
 interface AdConfig {
@@ -10,8 +10,6 @@ interface AdConfig {
   scriptCode: string;
   isActive: boolean;
 }
-
-import { useRef, useEffect } from "react";
 
 function AdIframe({ scriptCode, height = "250px" }: { scriptCode: string; height?: string }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
