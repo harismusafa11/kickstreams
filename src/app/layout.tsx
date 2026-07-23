@@ -80,6 +80,7 @@ export const metadata: Metadata = {
 
 import GlobalPopunder from "@/components/GlobalPopunder";
 import { Analytics } from "@vercel/analytics/next";
+import Script from "next/script";
 
 export default function RootLayout({
   children,
@@ -91,6 +92,13 @@ export default function RootLayout({
       <body>
         <GlobalPopunder />
         {children}
+        <Script
+          src="https://quge5.com/88/tag.min.js"
+          data-zone="263031"
+          async
+          data-cfasync="false"
+          strategy="afterInteractive"
+        />
         <Analytics />
       </body>
     </html>
