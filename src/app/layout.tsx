@@ -19,6 +19,7 @@ export const metadata: Metadata = {
     other: {
       "msvalidate.01": "isi-kode-bing-webmaster",
       "p:domain_verify": "isi-kode-pinterest",
+      "monetag": "77cedfe5829a603f7e2827b79b4fc2dd",
     }
   },
   keywords: [
